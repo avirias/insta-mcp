@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "insta-mcp": {
+      "command": "node",
+      "args": ["/Users/arjun/Desktop/insta-mcp/dist/index.js"]
+    }
+  }
+}
