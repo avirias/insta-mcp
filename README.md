@@ -68,6 +68,9 @@ npm run dev
 | `get_post_insights` | Get detailed analytics for a specific post |
 | `compare_follow_lists` | Find unfollowers and fans |
 | `search_instagram` | Search for users, hashtags, or places |
+| `upload_photo` | Upload a photo to Instagram as a new post |
+| `upload_video` | Upload a video to Instagram as a new post |
+| `upload_reel` | Upload a video as an Instagram Reel |
 
 ## Requirements
 

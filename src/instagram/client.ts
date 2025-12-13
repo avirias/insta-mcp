@@ -94,6 +94,14 @@ export interface PlaceSearchResult {
   url: string;
 }
 
+export interface PublishResult {
+  id: string;
+  shortcode: string;
+  postUrl: string;
+  caption: string;
+  mediaType: 'photo' | 'video' | 'reel';
+}
+
 export class InstagramClient {
   private rateLimiter: RateLimiter;
   private currentUserId: string | null = null;
@@ -427,5 +435,77 @@ export class InstagramClient {
       longitude: item.location.lng,
       url: `https://www.instagram.com/explore/locations/${item.location.pk}/`,
     }));
+  }
+
+  async uploadPhoto(
+    imageBuffer: Buffer,
+    caption: string = ''
+  ): Promise<PublishResult> {
+    const result = await this.withRateLimit(() =>
+      this.ig.publish.photo({
+        file: imageBuffer,
+        caption,
+      })
+    );
+
+    const media = result.media as unknown as { id: string; code: string; caption?: { text: string } | null };
+
+    return {
+      id: media.id,
+      shortcode: media.code,
+      postUrl: `https://www.instagram.com/p/${media.code}/`,
+      caption: media.caption?.text || caption,
+      mediaType: 'photo',
+    };
+  }
+
+  async uploadVideo(
+    videoBuffer: Buffer,
+    coverImageBuffer: Buffer,
+    caption: string = ''
+  ): Promise<PublishResult> {
+    const result = await this.withRateLimit(() =>
+      this.ig.publish.video({
+        video: videoBuffer,
+        coverImage: coverImageBuffer,
+        caption,
+      })
+    );
+
+    const media = result.media as unknown as { id: string; code: string; caption?: { text: string } | null };
+
+    return {
+      id: media.id,
+      shortcode: media.code,
+      postUrl: `https://www.instagram.com/p/${media.code}/`,
+      caption: media.caption?.text || caption,
+      mediaType: 'video',
+    };
+  }
+
+  async uploadReel(
+    videoBuffer: Buffer,
+    coverImageBuffer: Buffer,
+    caption: string = ''
+  ): Promise<PublishResult> {
+    // Reels are uploaded as regular videos through the instagram-private-api
+    // The API will handle the reel-specific processing
+    const result = await this.withRateLimit(() =>
+      this.ig.publish.video({
+        video: videoBuffer,
+        coverImage: coverImageBuffer,
+        caption,
+      })
+    );
+
+    const media = result.media as unknown as { id: string; code: string; caption?: { text: string } | null };
+
+    return {
+      id: media.id,
+      shortcode: media.code,
+      postUrl: `https://www.instagram.com/reel/${media.code}/`,
+      caption: media.caption?.text || caption,
+      mediaType: 'reel',
+    };
   }
 }

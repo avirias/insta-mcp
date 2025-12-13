@@ -39,3 +39,15 @@ export {
   searchDescription,
   searchInstagram,
 } from './search.js';
+
+export {
+  uploadPhotoSchema,
+  uploadPhotoDescription,
+  uploadPhoto,
+  uploadVideoSchema,
+  uploadVideoDescription,
+  uploadVideo,
+  uploadReelSchema,
+  uploadReelDescription,
+  uploadReel,
+} from './upload.js';

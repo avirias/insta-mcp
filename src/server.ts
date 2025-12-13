@@ -22,6 +22,15 @@ import {
   searchSchema,
   searchDescription,
   searchInstagram,
+  uploadPhotoSchema,
+  uploadPhotoDescription,
+  uploadPhoto,
+  uploadVideoSchema,
+  uploadVideoDescription,
+  uploadVideo,
+  uploadReelSchema,
+  uploadReelDescription,
+  uploadReel,
 } from './tools/index.js';
 
 export function createServer(igClient: InstagramClient): McpServer {
@@ -97,6 +106,36 @@ export function createServer(igClient: InstagramClient): McpServer {
     searchSchema,
     async (params) => {
       return searchInstagram(igClient, params);
+    }
+  );
+
+  // Register upload_photo tool
+  server.tool(
+    'upload_photo',
+    uploadPhotoDescription,
+    uploadPhotoSchema,
+    async (params) => {
+      return uploadPhoto(igClient, params);
+    }
+  );
+
+  // Register upload_video tool
+  server.tool(
+    'upload_video',
+    uploadVideoDescription,
+    uploadVideoSchema,
+    async (params) => {
+      return uploadVideo(igClient, params);
+    }
+  );
+
+  // Register upload_reel tool
+  server.tool(
+    'upload_reel',
+    uploadReelDescription,
+    uploadReelSchema,
+    async (params) => {
+      return uploadReel(igClient, params);
     }
   );
 
